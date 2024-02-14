@@ -16,7 +16,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
  # This is for LP - recognition
 import cv2
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import numpy as np
 import imutils
 import easyocr
@@ -64,7 +64,7 @@ class ImageUploadView(APIView):
 
             location = None
             for countour in contours:
-                approx = cv2.approxPolyDP(countour, 5, True)#set this 10 if it is not working
+                approx = cv2.approxPolyDP(countour, 10, True)#set this 10 if it is not working
                 if len(approx) == 4:
                     location=approx
                     break
