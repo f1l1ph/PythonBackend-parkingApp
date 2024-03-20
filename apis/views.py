@@ -16,7 +16,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
  # This is for LP - recognition
 import cv2
-#from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import numpy as np
 import imutils
 import easyocr
@@ -44,7 +44,7 @@ class GeekDeleteSet(generics.RetrieveUpdateDestroyAPIView):
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser,)
 
-    def post(self, request, *args, **kwa2rgs):
+    def post(self, request, *args, **kwa2rgs,):
         serializer = ImageUploadSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -69,7 +69,7 @@ class ImageUploadView(APIView):
                     location=approx
                     break
             if location is None:
-               return Response({"Error": "License Plate Not Found. Retry with different image."}, status = 400)
+               return Response({"License Plate Not Found. Retry with different image."}, status = 201)
 
             mask = np.zeros(gray.shape, np.uint8)
             new_image = cv2.drawContours(mask, [location], 0, 255, -1)
@@ -84,6 +84,6 @@ class ImageUploadView(APIView):
             result = reader.readtext(cropped_image)
             text = result[0][-2]
 
-            return Response(text)
+            return Response(text, status = 200)
         else:
-            return Response(serializer.errors,' 400 ', serializer,)
+            return Response(serializer.error_messages,' 400 ', serializer.error_messages,)
